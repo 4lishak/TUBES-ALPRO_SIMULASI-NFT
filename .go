@@ -3,112 +3,160 @@ package main
 import "fmt"
 
 type NFT struct {
-	namaAset         string
-	kenaikanPerBulan float64
+	namaAset string
+	invest   float64
 }
 
-type jenisNFT []NFT
+const NMAX int = 100
+
+type tabNFT [NMAX]NFT
 
 func main() {
 	var pilihan int
 
-	fmt.Println("SIMULASI INVESTASI NFT")
-	fmt.Println("Menu:")
-	fmt.Println("1. Daftar Aset NFT")
-	fmt.Println("2. Tambah NFT")
-	fmt.Println("3. Hapus NFT")
-	fmt.Println("4. Ubah NFT")
-	fmt.Println("5. Hitung Investasi NFT")
-	fmt.Println("6. Selesai")
-	fmt.Print("Pilih menu:")
+	tampilMenu(pilihan)
 
-	fmt.Scan(&pilihan)
+}
 
-	if pilihan == 1 {
-		// panggil func pilihanNFT
-		// gimana caranya
-	} else if pilihan == 2 {
-		// nambah nft
-	} else if pilihan == 3 {
-		// hapus nft
-	} else if pilihan == 4 {
-		// ubah nft
-	} else if pilihan == 5 {
-		var aset string
-		var uang float64
-		var bulan1, bulan3, bulan6, profit float64
+func pilihanNFT() { // ini buat nampilin jenis jenis nftnya, pilihan ke 1
+	fmt.Println("Daftar NFT:")
+	fmt.Println("1. Bitcoin")
+	fmt.Println("2. Ethereum")
+	fmt.Println("3. Solana")
 
-		fmt.Println("Masukan Jenis Aset:")
-		fmt.Scanln(&aset)
+}
 
-		fmt.Println("Masukkan Jumlah Investasi:")
-		fmt.Scanln(&uang)
+func nambahinNFT(A *tabNFT, N *int) { // buat nambahin nft, pilihan kedua
+	fmt.Print("Masukan nama NFT : ")
+	fmt.Scan(&(*A)[*N].namaAset)
+	fmt.Print("Masukan jumlah investasi yang Anda inginkan : ")
+	fmt.Scan(&(*A)[*N].invest)
+	*N++
+}
 
-		keuntungan(aset, uang, &bulan1, &bulan3, &bulan6, &profit)
-
-		fmt.Println("Hasil Investasi")
-		fmt.Printf("Investasi setelah 1 bulan: %.2f\n", bulan1)
-		fmt.Printf("Investasi setelah 3 bulan: %.2f\n", bulan3)
-		fmt.Printf("Investasi setelah 6 bulan: %.2f\n", bulan6)
-		fmt.Printf("Provit yang didapatkan: %.2f\n", profit)
-	} else if pilihan == 6 {
-		fmt.Println("Investasi selesai")
-	} else {
-		fmt.Println()
+func TampilAset(A tabNFT, N int) {
+	var i int
+	for i = 0; i < N; i++ {
+		fmt.Println("Aset Yang Anda miliki : ", A[i].namaAset, A[i].invest)
 	}
-
 }
 
-func pilihanNFT(jenisNFT) { // ini buat nampilin jenis jenis nftnya, pilihan ke 1
-	if jenisNFT == 0 {
-		fmt.Println("Belum ada NFT")
-	} else {
-		fmt.Println("Daftar NFT:")
-		fmt.Println("1. Bitcoin")  // kenaikannya 1.05 atau 5%
-		fmt.Println("2. Ethereum") // naik 1.04 atau 4%
-		fmt.Println("3. Solana")   // naik 1.03 atau 3%
-
-	}
-
-}
-
-func nambahinNFT() { // buat nambahin nft, pilihan kedua
-
-}
-
-func hapusNFT() {
-
-}
-
-func mengubahNFT() {
-
-}
-
-func keuntungan(aset string, uang float64, bulan1, bulan3, bulan6, profit *float64) { // procedure buat itung keuntungannya
+func perBulan(A tabNFT, N int) float64 { // (function) menghitung investasi perbulan
 	var i int
 
-	*bulan1 = perBulan(aset, uang)
-
-	*bulan3 = uang
-	for i = 0; i < 3; i++ {
-		*bulan3 = perBulan(aset, *bulan3)
+	for i = 0; i < N; i++ {
+		if A[i].namaAset == "Bitcoin" {
+			return A[i].invest * 105 / 100
+		} else if A[i].namaAset == "Ethereum" {
+			return A[i].invest * 104 / 100
+		} else if A[i].namaAset == "Solana" {
+			return A[i].invest * 103 / 100
+		} else {
+			return 0
+		}
 	}
-
-	*bulan6 = uang
-	for i = 0; i < 6; i++ {
-		*bulan6 = perBulan(aset, *bulan6)
-	}
-
-	*profit = *bulan6 - uang
+	return 0
 }
-func perBulan(aset string, uang float64) float64 { // (function) menghitung investasi perbulan
-	if aset == "Bitcoin" {
-		return uang * 105 / 100
-	} else if aset == "Ethereum" {
-		return uang * 104 / 100
-	} else if aset == "Solana" {
-		return uang * 103 / 100
+
+func tampilMenu(pilihan int) {
+	var data tabNFT
+	var nData int
+
+	for pilihan != 7 {
+		fmt.Println("SIMULASI INVESTASI NFT")
+		fmt.Println("Menu:")
+		fmt.Println("1. Daftar NFT")
+		fmt.Println("2. Tambah NFT")
+		fmt.Println("3. Hapus NFT")
+		fmt.Println("4. Ubah NFT")
+		fmt.Println("5. Hitung Investasi NFT")
+		fmt.Println("6. Tampilkan Aset")
+		fmt.Println("7. Selesai")
+		fmt.Print("Pilih menu:")
+
+		fmt.Scan(&pilihan)
+
+		if pilihan == 1 {
+			pilihanNFT()
+		} else if pilihan == 2 {
+			nambahinNFT(&data, &nData)
+		} else if pilihan == 3 {
+			// hapus nft
+		} else if pilihan == 4 {
+			// ubah nft
+		} else if pilihan == 5 {
+
+		} else if pilihan == 6 {
+			TampilAset(data, nData)
+		}
+	}
+	fmt.Println("Program Selesai!")
+}
+
+// mencari nft sequential dan binary search
+func seqSearch(A *tabNFT, total int, x string) int {
+	var i int
+	i = 0
+	for i < total && A[i].namaAset != x {
+		i++
+	}
+	if i < total {
+		return i // ditemukan
 	} else {
-		return 0
+		return -1 // tidak ditemukan
+	}
+}
+
+func binSearch(A *tabNFT, total int, x float64) int { // binary search brdsaekan invest
+	var left, right, mid int
+	var ketemu int
+	left = 0
+	right = total
+	ketemu = -1
+	for left <= right && ketemu == -1 {
+		mid = (left + right) / 2
+		if x < (*A[mid]).invest {
+			right = mid - 1
+		} else if x > (*A[mid]).invest {
+			left = mid + 1
+		} else {
+			ketemu = mid
+		}
+	}
+	return ketemu
+}
+
+// mengurutkan nft selection dan insertion sort
+func selectionSort(A *tabNFT, total int) {
+	var pass, i, idx, temp int
+	pass = 1
+	for pass <= total-1 {
+		idx = pass - 1
+		i = pass
+		for i < total {
+			if (*A[i].invest) < (*A[idx].invest) {
+				idx = i
+			}
+			i++
+		}
+		temp = A[pass-1]
+		(*A[pass-1]) = (*A[idx])
+		(*A[idx]) = temp
+		pass++
+	}
+}
+
+func insertionSort(A *tabNFT, total int) {
+	var pass, i, temp int
+	pass = 1
+	for pass <= total-1 {
+		i = pass
+		temp = A[pass]
+		for i > 0 && temp.invest < (*A[i-1].invest) {
+			(*A[i]) = (*A[i-1])
+			i--
+		}
+		(*A[i]) = temp
+		pass++
 	}
 }
